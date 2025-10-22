@@ -5,8 +5,11 @@ wandb/
 assets/
 data/
 *.log
-z*.png
+z*
 *.pdf
 inference_log/
 plot_log/
 __pycache__/
+plot_snr.py
+segmentation_results/
+wx_push.py
