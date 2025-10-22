@@ -1,0 +1,14 @@
+_base_: default.yml
+model:
+  clip_model_name: ViT-B/16
+  keep_cls: false
+  keep_end_seq: false
+  model_name: dinov2_vits14_reg
+  proj_model: DINOJSCC_Adapter
+  proj_name: vits_jscc_infonce
+  proj_class: vits_jscc_infonce
+  resize_dim: 518
+  type: DINOJSCC
+  use_avg_text_token: false
+  k: 256
+  text_adapter_pretrain: "weights/vits_mlp_infonce.pth"

@@ -1,0 +1,76 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "torch.distributed.run",
+            // "program": "${file}",
+            "console": "integratedTerminal", 
+            "justMyCode": false, 
+            "env": {
+                "CUDA_VISIBLE_DEVICES": "0"
+            },
+            "args": [
+                // // 提取COCO数据集的特征
+                // "--ann_path", "../coco/captions_val2014.json",
+                // "--out_path", "/data1/bohnsix/talking2dino/coco2014_dinov2reg_s_p14/train.pth",
+                // "--model", "dinov2_vits14_reg",
+                // "--resize_dim", "448",
+                // "--crop_dim", "448",
+                // "--extract_patch_tokens",
+                // "--extract_avg_self_attn",
+                // "--extract_self_attn_maps", 
+                // "--extract_cls",
+
+
+                // // 第一阶段训练文本模型
+                // "--model", "configs/first_stage/vits_mlp_infonce.yaml", 
+                // "--train_dataset", "/data1/bohnsix/talking2dino/coco2014_dinov2reg_s_p14/train.pth", 
+                // "--val_dataset", "/data1/bohnsix/talking2dino/coco2014_dinov2reg_s_p14/val.pth"
+
+                
+                // // 第二阶段训练视觉模型
+                // "--model", "configs/second_stage/vitb_jscc_infonce.yaml",
+                // "--feature_name", "patch_tokens",
+                // "--train_dataset", "/data1/bohnsix/talking2dino_cvpr/coco2014_dinov2reg_b_p14/train.pth",
+                // "--val_dataset", "/data1/bohnsix/talking2dino_cvpr/coco2014_dinov2reg_b_p14/val.pth", 
+                // "--channelk", "48",
+
+                // cityscapes 测试代码  需要使用torch.distributed.run 
+                "src/open_vocabulary_segmentation/main.py",  "--eval",
+                // "--eval_cfg", "src/open_vocabulary_segmentation/configs/cityscapes/dinotext_cityscapes_vitb_mlp_infonce.yml",
+                "--eval_cfg", "src/open_vocabulary_segmentation/configs/cityscapes/dinojscc_cityscapes_vitb_mlp_infonce.yml",
+                "--eval_base", "src/open_vocabulary_segmentation/configs/cityscapes/eval_cityscapes.yml",
+                "--channelk", "48",
+                
+                // ade 测试代码  需要使用torch.distributed.run
+                // "src/open_vocabulary_segmentation/main.py",  "--eval",
+                // // "--eval_cfg", "src/open_vocabulary_segmentation/configs/ade/dinojscc_ade_vitb_mlp_infonce.yml",
+                // "--eval_cfg", "src/open_vocabulary_segmentation/configs/ade/dinojscc_ade_vits_mlp_infonce.yml",
+                // "--eval_base", "src/open_vocabulary_segmentation/configs/ade/eval_ade.yml",
+                // // "--channelk", "32"
+                // "--channelk", "18",
+
+                // // VOC 测试代码  需要使用torch.distributed.run 
+                // "--master_port", "29501",
+                // "src/open_vocabulary_segmentation/main.py",  "--eval",
+                // "--eval_cfg", "src/open_vocabulary_segmentation/configs/voc/dinojscc_voc_vitb_mlp_infonce.yml",
+                // "--eval_base", "src/open_vocabulary_segmentation/configs/voc/eval_voc.yml",
+                // "--channelk", "18",
+
+                // // Stuff 测试代码  需要使用torch.distributed.run 
+                // "src/open_vocabulary_segmentation/main.py",  "--eval",
+                // "--eval_cfg", "src/open_vocabulary_segmentation/configs/stuff/dinojscc_stuff_vitb_mlp_infonce.yml",
+                // "--eval_base", "src/open_vocabulary_segmentation/configs/stuff/eval_stuff.yml",
+                // "--channelk", "24",
+
+            ]
+        }
+    ]
+}

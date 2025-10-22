@@ -1,0 +1,15 @@
+
+model:
+  model_class: DINOJSCC_Adapter
+  act: tanh # None, tanh, relu or sigmoid
+  hidden_layer: True
+  dino_embed_dim: 768
+  k: 256
+  text_adapter_pretrain: "weights/vitb_mlp_infonce.pth"
+
+train:
+  lr: 0.0001
+  ltype: 'infonce'
+  num_epochs: 20
+  batch_size: 128
+  save_best_model: False

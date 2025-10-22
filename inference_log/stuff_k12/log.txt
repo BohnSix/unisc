@@ -1,0 +1,470 @@
+[2025-10-14 11:34:15 default] (main.py 589): INFO Full config saved to inference_log/stuff_k12/config.json
+[2025-10-14 11:34:15 default] (main.py 595): INFO Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0]
+CUDA available: True
+GPU 0,1,2,3: NVIDIA GeForce RTX 4090
+CUDA_HOME: /usr/local/cuda-11.8
+NVCC: Cuda compilation tools, release 11.8, V11.8.89
+GCC: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+PyTorch: 1.13.1+cu117
+PyTorch compiling details: PyTorch built with:
+  - GCC 9.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.0 Product Build 20191122 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.6.0 (Git Hash 52b5f107dd9cf10910aaa19cb47f3abf9b349815)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.7
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86
+  - CuDNN 8.5
+  - Magma 2.6.1
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.7, CUDNN_VERSION=8.5.0, CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/c++, CXX_FLAGS= -fabi-version=11 -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wunused-local-typedefs -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.13.1, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+TorchVision: 0.14.1+cu117
+OpenCV: 4.6.0
+MMCV: 1.6.2
+MMCV Compiler: GCC 9.4
+MMCV CUDA Compiler: 11.8
+------------------------------------------------------------
+
+[2025-10-14 11:34:15 default] (main.py 597): INFO Git hash: ef51a59
+[2025-10-14 11:34:15 default] (main.py 600): INFO evaluate:
+  pamr: false
+  bg_thresh: 0.4
+  kp_w: 0.3
+  pred_qual_path: null
+  gt_qual_path: null
+  eval_only: true
+  template: sub_imagenet_template
+  task:
+  - coco_stuff
+  t_voc20: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/t_pascal_voc12_20.py
+  t_context59: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/t_pascal_context59.py
+  voc: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_voc12.py
+  voc20: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_voc12_20.py
+  context: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_context.py
+  context59: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_context59.py
+  coco_stuff: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/stuff.py
+  coco_object: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/coco.py
+  cityscapes: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/cityscapes.py
+  ade20k: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/ade20k.py
+  save_logits: null
+  eval_freq: 5000
+_base_: default.yml
+data:
+  batch_size: 256
+  pin_memory: true
+  num_workers: 0
+  seed: ${train.seed}
+  dataset:
+    meta:
+      gcc3m:
+        type: img_txt_pair
+        path: ./data/gcc3m
+        prefix: gcc-train-{000000..00347}.tar
+        length: 2881393
+      gcc12m:
+        type: img_txt_pair
+        path: ./data/gcc12m
+        prefix: cc-{000000..001175}.tar
+        length: 11286526
+    train:
+    - gcc3m
+    - gcc12m
+  img_aug:
+    deit_aug: true
+    img_size: 224
+    img_scale:
+    - 0.08
+    - 1.0
+    interpolation: bilinear
+    color_jitter: 0.4
+    auto_augment: rand-m9-mstd0.5-inc1
+    re_prob: 0.25
+    re_mode: pixel
+    re_count: 1
+  text_aug: null
+train:
+  start_step: 0
+  total_steps: 50000
+  warmup_steps: 20000
+  ust_steps: 0
+  base_lr: 0.0016
+  weight_decay: 0.05
+  min_lr: 4.0e-05
+  clip_grad: 5.0
+  fp16: true
+  fp16_comm: true
+  seed: 42
+  lr_scheduler:
+    name: cosine
+  optimizer:
+    name: adamw
+    eps: 1.0e-08
+    betas:
+    - 0.9
+    - 0.999
+checkpoint:
+  resume: ''
+  save_topk: 0
+  save_all: false
+model_name: default
+output: inference_log/stuff_k12
+tag: default
+print_freq: 20
+seed: 42
+wandb: false
+model:
+  clip_model_name: ViT-B/16
+  keep_cls: false
+  keep_end_seq: false
+  model_name: dinov2_vitb14_reg
+  proj_model: DINOJSCC_Adapter
+  proj_name: vitb_jscc_infonce
+  proj_class: vitb_jscc_infonce
+  resize_dim: 518
+  type: DINOJSCC
+  use_avg_text_token: false
+  k: 12
+  text_adapter_pretrain: weights/vitb_mlp_infonce.pth
+
+[2025-10-14 11:34:15 default] (main.py 202): INFO Creating model:DINOJSCC/default
+[2025-10-14 11:34:20 default] (main.py 221): INFO number of params: 611521 (0.6M)
+[2025-10-14 11:34:20 default] (main.py 225): INFO GROUP_RANK = 0 | LOCAL_RANK = 0 | RANK = 0 | MASTER_ADDR = 127.0.0.1 | MASTER_PORT = 29500 | ROLE_RANK = 0 | LOCAL_WORLD_SIZE = 1 | WORLD_SIZE = 1 | ROLE_WORLD_SIZE = 1 | TORCHELASTIC_RESTART_COUNT = 0 | TORCHELASTIC_MAX_RESTARTS = 0 | TORCHELASTIC_RUN_ID = none
+[2025-10-14 11:34:20 default] (main.py 232): INFO !!! Single-node setting :: skip fp16 compression hook
+[2025-10-14 11:34:20 default] (main.py 450): INFO ### Validation dataset: coco_stuff (Subset)
+[2025-10-14 11:34:21 default] (dinotext_seg.py 43): INFO Building DINOTextSegInference with 171 classes, test_cfg=Config (path: None): {'mode': 'slide', 'stride': (224, 224), 'crop_size': (448, 448)}, with_bg=False, pamr=False, bg_thresh=0.4
+[2025-10-14 11:44:27 default] (main.py 589): INFO Full config saved to inference_log/stuff_k12/config.json
+[2025-10-14 11:44:27 default] (main.py 595): INFO Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0]
+CUDA available: True
+GPU 0,1,2,3: NVIDIA GeForce RTX 4090
+CUDA_HOME: /usr/local/cuda-11.8
+NVCC: Cuda compilation tools, release 11.8, V11.8.89
+GCC: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+PyTorch: 1.13.1+cu117
+PyTorch compiling details: PyTorch built with:
+  - GCC 9.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.0 Product Build 20191122 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.6.0 (Git Hash 52b5f107dd9cf10910aaa19cb47f3abf9b349815)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.7
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86
+  - CuDNN 8.5
+  - Magma 2.6.1
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.7, CUDNN_VERSION=8.5.0, CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/c++, CXX_FLAGS= -fabi-version=11 -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wunused-local-typedefs -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.13.1, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+TorchVision: 0.14.1+cu117
+OpenCV: 4.6.0
+MMCV: 1.6.2
+MMCV Compiler: GCC 9.4
+MMCV CUDA Compiler: 11.8
+------------------------------------------------------------
+
+[2025-10-14 11:44:27 default] (main.py 597): INFO Git hash: ef51a59
+[2025-10-14 11:44:27 default] (main.py 600): INFO evaluate:
+  pamr: false
+  bg_thresh: 0.4
+  kp_w: 0.3
+  pred_qual_path: null
+  gt_qual_path: null
+  eval_only: true
+  template: sub_imagenet_template
+  task:
+  - coco_stuff
+  t_voc20: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/t_pascal_voc12_20.py
+  t_context59: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/t_pascal_context59.py
+  voc: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_voc12.py
+  voc20: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_voc12_20.py
+  context: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_context.py
+  context59: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_context59.py
+  coco_stuff: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/stuff.py
+  coco_object: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/coco.py
+  cityscapes: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/cityscapes.py
+  ade20k: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/ade20k.py
+  save_logits: null
+  eval_freq: 5000
+_base_: default.yml
+data:
+  batch_size: 256
+  pin_memory: true
+  num_workers: 0
+  seed: ${train.seed}
+  dataset:
+    meta:
+      gcc3m:
+        type: img_txt_pair
+        path: ./data/gcc3m
+        prefix: gcc-train-{000000..00347}.tar
+        length: 2881393
+      gcc12m:
+        type: img_txt_pair
+        path: ./data/gcc12m
+        prefix: cc-{000000..001175}.tar
+        length: 11286526
+    train:
+    - gcc3m
+    - gcc12m
+  img_aug:
+    deit_aug: true
+    img_size: 224
+    img_scale:
+    - 0.08
+    - 1.0
+    interpolation: bilinear
+    color_jitter: 0.4
+    auto_augment: rand-m9-mstd0.5-inc1
+    re_prob: 0.25
+    re_mode: pixel
+    re_count: 1
+  text_aug: null
+train:
+  start_step: 0
+  total_steps: 50000
+  warmup_steps: 20000
+  ust_steps: 0
+  base_lr: 0.0016
+  weight_decay: 0.05
+  min_lr: 4.0e-05
+  clip_grad: 5.0
+  fp16: true
+  fp16_comm: true
+  seed: 42
+  lr_scheduler:
+    name: cosine
+  optimizer:
+    name: adamw
+    eps: 1.0e-08
+    betas:
+    - 0.9
+    - 0.999
+checkpoint:
+  resume: ''
+  save_topk: 0
+  save_all: false
+model_name: default
+output: inference_log/stuff_k12
+tag: default
+print_freq: 20
+seed: 42
+wandb: false
+model:
+  clip_model_name: ViT-B/16
+  keep_cls: false
+  keep_end_seq: false
+  model_name: dinov2_vitb14_reg
+  proj_model: DINOJSCC_Adapter
+  proj_name: vitb_jscc_infonce
+  proj_class: vitb_jscc_infonce
+  resize_dim: 518
+  type: DINOJSCC
+  use_avg_text_token: false
+  k: 12
+  text_adapter_pretrain: weights/vitb_mlp_infonce.pth
+
+[2025-10-14 11:44:28 default] (main.py 202): INFO Creating model:DINOJSCC/default
+[2025-10-14 11:44:33 default] (main.py 221): INFO number of params: 611521 (0.6M)
+[2025-10-14 11:44:33 default] (main.py 225): INFO GROUP_RANK = 0 | LOCAL_RANK = 0 | RANK = 0 | MASTER_ADDR = 127.0.0.1 | MASTER_PORT = 29500 | ROLE_RANK = 0 | LOCAL_WORLD_SIZE = 1 | WORLD_SIZE = 1 | ROLE_WORLD_SIZE = 1 | TORCHELASTIC_RESTART_COUNT = 0 | TORCHELASTIC_MAX_RESTARTS = 0 | TORCHELASTIC_RUN_ID = none
+[2025-10-14 11:44:33 default] (main.py 232): INFO !!! Single-node setting :: skip fp16 compression hook
+[2025-10-14 11:44:33 default] (main.py 450): INFO ### Validation dataset: coco_stuff (Subset)
+[2025-10-14 11:44:34 default] (dinotext_seg.py 43): INFO Building DINOTextSegInference with 171 classes, test_cfg=Config (path: None): {'mode': 'slide', 'stride': (224, 224), 'crop_size': (448, 448)}, with_bg=False, pamr=False, bg_thresh=0.4
+[2025-10-14 12:03:48 default] (logging.py 102): INFO per class results:
+[2025-10-14 12:03:48 default] (logging.py 102): INFO 
++------------------+-------+-------+
+|      Class       |  IoU  |  Acc  |
++------------------+-------+-------+
+|      person      | 15.99 | 16.78 |
+|     bicycle      | 35.14 | 42.91 |
+|       car        | 29.12 | 32.09 |
+|    motorcycle    | 58.09 | 87.17 |
+|     airplane     | 47.36 | 84.18 |
+|       bus        | 40.75 | 70.21 |
+|      train       | 17.46 | 18.46 |
+|      truck       | 18.74 | 24.76 |
+|       boat       | 18.55 |  22.8 |
+|  traffic light   | 13.31 |  49.0 |
+|   fire hydrant   |  1.75 |  2.8  |
+|    stop sign     |  16.0 | 72.58 |
+|  parking meter   |  7.95 | 62.78 |
+|      bench       | 28.87 | 49.99 |
+|       bird       |  0.0  |  0.0  |
+|       cat        | 53.04 | 92.19 |
+|       dog        |  0.26 |  0.26 |
+|      horse       | 40.11 | 56.32 |
+|      sheep       | 33.52 | 48.96 |
+|       cow        | 41.96 | 62.94 |
+|     elephant     | 65.52 | 86.44 |
+|       bear       |  3.09 | 12.25 |
+|      zebra       | 60.27 | 88.34 |
+|     giraffe      | 52.34 | 70.46 |
+|     backpack     |  3.2  | 79.03 |
+|     umbrella     | 37.24 | 64.42 |
+|     handbag      |  0.05 |  0.08 |
+|       tie        |  1.3  | 44.66 |
+|     suitcase     |  12.3 | 39.33 |
+|     frisbee      |  0.02 |  0.04 |
+|       skis       |  2.74 | 75.94 |
+|    snowboard     |  1.57 | 28.95 |
+|   sports ball    |  0.01 |  0.02 |
+|       kite       | 12.69 | 52.66 |
+|   baseball bat   | 11.17 | 23.43 |
+|  baseball glove  |  2.84 | 90.17 |
+|    skateboard    |  3.04 | 13.99 |
+|    surfboard     | 13.37 | 18.45 |
+|  tennis racket   | 13.11 |  80.4 |
+|      bottle      |  0.72 |  0.73 |
+|    wine glass    | 12.27 | 41.48 |
+|       cup        |  0.77 |  0.79 |
+|       fork       | 10.92 | 18.15 |
+|      knife       |  0.0  |  0.0  |
+|      spoon       |  0.31 |  0.34 |
+|       bowl       |  0.12 |  0.12 |
+|      banana      | 52.66 |  73.1 |
+|      apple       | 23.78 | 59.87 |
+|     sandwich     |  9.43 | 15.05 |
+|      orange      |  0.0  |  0.0  |
+|     broccoli     | 33.54 |  81.8 |
+|      carrot      |  0.0  |  0.0  |
+|     hot dog      |  7.41 |  7.77 |
+|      pizza       | 41.26 | 87.69 |
+|      donut       |  19.5 | 44.08 |
+|       cake       | 20.72 |  55.9 |
+|      chair       |  8.99 | 10.19 |
+|      couch       | 27.43 | 69.01 |
+|   potted plant   |  1.03 |  1.07 |
+|       bed        | 11.74 | 11.93 |
+|   dining table   |  9.51 | 12.05 |
+|      toilet      | 29.01 | 76.51 |
+|        tv        | 22.51 | 35.94 |
+|      laptop      | 33.17 | 58.49 |
+|      mouse       |  0.0  |  0.0  |
+|      remote      |  0.0  |  0.0  |
+|     keyboard     |  0.29 |  0.29 |
+|    cell phone    |  0.28 |  0.44 |
+|    microwave     | 10.11 | 31.11 |
+|       oven       |  1.43 |  1.44 |
+|     toaster      |  1.28 |  3.38 |
+|       sink       | 23.35 | 68.63 |
+|   refrigerator   | 17.52 | 30.65 |
+|       book       |  8.28 | 11.41 |
+|      clock       | 29.99 | 37.22 |
+|       vase       |  1.2  |  1.23 |
+|     scissors     |  1.07 |  1.19 |
+|    teddy bear    | 33.37 | 77.96 |
+|    hair drier    |  1.25 |  23.7 |
+|    toothbrush    |  2.39 | 37.26 |
+|      banner      |  7.63 | 10.65 |
+|     blanket      |  5.53 | 22.44 |
+|      branch      |  3.29 |  5.16 |
+|      bridge      |  2.33 |  2.66 |
+|  building-other  | 21.59 | 28.93 |
+|       bush       |  0.0  |  0.0  |
+|     cabinet      |  0.0  |  0.0  |
+|       cage       |  0.57 |  0.64 |
+|    cardboard     |  0.94 |  0.95 |
+|      carpet      | 13.48 | 61.23 |
+|  ceiling-other   | 14.44 | 15.94 |
+|   ceiling-tile   |  0.04 |  2.8  |
+|      cloth       |  0.1  |  0.21 |
+|     clothes      |  2.33 | 15.21 |
+|      clouds      |  0.91 |  0.91 |
+|     counter      |  0.02 |  0.02 |
+|     cupboard     |  1.04 | 59.69 |
+|     curtain      | 12.71 | 58.05 |
+|    desk-stuff    |  8.41 | 37.71 |
+|       dirt       | 12.99 | 43.62 |
+|    door-stuff    |  2.32 |  2.91 |
+|      fence       |  13.7 | 25.73 |
+|   floor-marble   |  0.0  |  0.0  |
+|   floor-other    |  3.01 |  4.04 |
+|   floor-stone    |  0.0  |  0.0  |
+|    floor-tile    | 24.97 | 47.07 |
+|    floor-wood    |  3.22 |  4.58 |
+|      flower      |  0.49 |  0.5  |
+|       fog        |  2.79 |  87.7 |
+|    food-other    |  1.88 |  3.42 |
+|      fruit       |  14.3 | 25.45 |
+| furniture-other  |  0.31 |  0.31 |
+|      grass       |  1.19 |  1.2  |
+|      gravel      | 10.74 | 15.22 |
+|   ground-other   |  0.14 |  0.16 |
+|       hill       |  0.16 |  0.17 |
+|      house       |  0.03 |  0.03 |
+|      leaves      |  0.0  |  0.0  |
+|      light       |  0.18 |  0.2  |
+|       mat        |  0.0  |  0.0  |
+|      metal       |  0.0  |  0.0  |
+|   mirror-stuff   |  0.06 |  0.06 |
+|       moss       |  0.0  |  0.0  |
+|     mountain     | 26.06 | 38.33 |
+|       mud        |  0.74 | 15.33 |
+|      napkin      |  4.99 |  51.6 |
+|       net        |  1.74 |  2.14 |
+|      paper       |  0.37 |  0.37 |
+|     pavement     |  26.7 | 58.13 |
+|      pillow      |  1.53 |  7.33 |
+|   plant-other    |  0.14 |  0.14 |
+|     plastic      |  0.0  |  0.0  |
+|     platform     |  0.0  |  0.0  |
+|   playingfield   |  0.73 |  0.77 |
+|     railing      |  0.23 |  0.25 |
+|     railroad     | 21.34 |  61.5 |
+|      river       |  0.24 |  0.25 |
+|       road       |  4.9  |  5.24 |
+|       rock       |  0.03 |  0.03 |
+|       roof       |  0.0  |  0.0  |
+|       rug        |  1.47 |  1.67 |
+|      salad       |  1.7  | 55.76 |
+|       sand       | 10.08 |  70.8 |
+|       sea        | 47.56 | 59.57 |
+|      shelf       |  0.0  |  0.0  |
+|    sky-other     |  4.95 |  5.26 |
+|    skyscraper    |  16.2 | 48.21 |
+|       snow       | 51.36 | 58.37 |
+|   solid-other    |  0.0  |  0.0  |
+|      stairs      |  0.73 |  1.04 |
+|      stone       |  0.0  |  0.0  |
+|      straw       |  0.0  |  0.0  |
+| structural-other |  0.0  |  0.0  |
+|      table       |  0.0  |  0.0  |
+|       tent       |  1.83 |  5.2  |
+|  textile-other   |  2.04 |  2.43 |
+|      towel       |  1.12 |  3.17 |
+|       tree       | 17.72 | 19.26 |
+|    vegetable     |  1.05 |  1.21 |
+|    wall-brick    |  5.34 |  7.78 |
+|  wall-concrete   |  3.44 |  4.0  |
+|    wall-other    |  0.0  |  0.0  |
+|    wall-panel    |  0.0  |  0.0  |
+|    wall-stone    |  0.63 |  0.66 |
+|    wall-tile     |  12.0 |  12.3 |
+|    wall-wood     |  2.67 |  2.89 |
+|   water-other    |  0.0  |  0.0  |
+|    waterdrops    |  0.0  |  0.0  |
+|   window-blind   |  1.75 | 81.19 |
+|   window-other   |  0.0  |  0.0  |
+|       wood       |  1.32 |  1.41 |
++------------------+-------+-------+
+[2025-10-14 12:03:48 default] (logging.py 102): INFO Summary:
+[2025-10-14 12:03:48 default] (logging.py 102): INFO 
++-------+-------+-------+
+|  aAcc |  mIoU |  mAcc |
++-------+-------+-------+
+| 21.08 | 10.44 | 24.11 |
++-------+-------+-------+
+[2025-10-14 12:03:49 default] (main.py 454): INFO [coco_stuff] mIoU of 5000 test images: 10.44%
+[2025-10-14 12:03:49 default] (main.py 241): INFO {'val/coco_stuff_miou': 10.44, 'metrics': [{'aAcc': 0.2108, 'mIoU': 0.10439999999999999, 'mAcc': 0.24109999999999998, 'IoU.person': 0.15989999771118163, 'IoU.bicycle': 0.35139999389648435, 'IoU.car': 0.291200008392334, 'IoU.motorcycle': 0.580900001525879, 'IoU.airplane': 0.4736000061035156, 'IoU.bus': 0.4075, 'IoU.train': 0.17459999084472655, 'IoU.truck': 0.18739999771118165, 'IoU.boat': 0.18549999237060547, 'IoU.traffic light': 0.133100004196167, 'IoU.fire hydrant': 0.0175, 'IoU.stop sign': 0.16, 'IoU.parking meter': 0.07949999809265136, 'IoU.bench': 0.288700008392334, 'IoU.bird': 0.0, 'IoU.cat': 0.5304000091552734, 'IoU.dog': 0.0025999999046325685, 'IoU.horse': 0.40110000610351565, 'IoU.sheep': 0.3352000045776367, 'IoU.cow': 0.41959999084472654, 'IoU.elephant': 0.655199966430664, 'IoU.bear': 0.030899999141693116, 'IoU.zebra': 0.6027000045776367, 'IoU.giraffe': 0.523400001525879, 'IoU.backpack': 0.03200000047683716, 'IoU.umbrella': 0.37240001678466794, 'IoU.handbag': 0.0005000000074505806, 'IoU.tie': 0.012999999523162841, 'IoU.suitcase': 0.12300000190734864, 'IoU.frisbee': 0.00019999999552965163, 'IoU.skis': 0.02740000009536743, 'IoU.snowboard': 0.015700000524520873, 'IoU.sports ball': 9.999999776482581e-05, 'IoU.kite': 0.12689999580383302, 'IoU.baseball bat': 0.11170000076293946, 'IoU.baseball glove': 0.028399999141693114, 'IoU.skateboard': 0.030399999618530273, 'IoU.surfboard': 0.1336999988555908, 'IoU.tennis racket': 0.13109999656677246, 'IoU.bottle': 0.007200000286102295, 'IoU.wine glass': 0.12270000457763672, 'IoU.cup': 0.007699999809265137, 'IoU.fork': 0.10920000076293945, 'IoU.knife': 0.0, 'IoU.spoon': 0.003100000023841858, 'IoU.bowl': 0.0011999999731779098, 'IoU.banana': 0.5265999984741211, 'IoU.apple': 0.23780000686645508, 'IoU.sandwich': 0.09430000305175781, 'IoU.orange': 0.0, 'IoU.broccoli': 0.33540000915527346, 'IoU.carrot': 0.0, 'IoU.hot dog': 0.07409999847412109, 'IoU.pizza': 0.41259998321533203, 'IoU.donut': 0.195, 'IoU.cake': 0.20719999313354492, 'IoU.chair': 0.08989999771118164, 'IoU.couch': 0.27430000305175783, 'IoU.potted plant': 0.010299999713897705, 'IoU.bed': 0.11739999771118165, 'IoU.dining table': 0.09510000228881836, 'IoU.toilet': 0.2901000022888184, 'IoU.tv': 0.22510000228881835, 'IoU.laptop': 0.33169998168945314, 'IoU.mouse': 0.0, 'IoU.remote': 0.0, 'IoU.keyboard': 0.0028999999165534975, 'IoU.cell phone': 0.002800000011920929, 'IoU.microwave': 0.10109999656677246, 'IoU.oven': 0.014299999475479126, 'IoU.toaster': 0.012799999713897704, 'IoU.sink': 0.23350000381469727, 'IoU.refrigerator': 0.1752000045776367, 'IoU.book': 0.08279999732971191, 'IoU.clock': 0.29989999771118164, 'IoU.vase': 0.012000000476837159, 'IoU.scissors': 0.010700000524520874, 'IoU.teddy bear': 0.33369998931884765, 'IoU.hair drier': 0.0125, 'IoU.toothbrush': 0.023900001049041747, 'IoU.banner': 0.07630000114440919, 'IoU.blanket': 0.055300002098083494, 'IoU.branch': 0.032899999618530275, 'IoU.bridge': 0.023299999237060547, 'IoU.building-other': 0.2159000015258789, 'IoU.bush': 0.0, 'IoU.cabinet': 0.0, 'IoU.cage': 0.0056999999284744265, 'IoU.cardboard': 0.009399999976158141, 'IoU.carpet': 0.1347999954223633, 'IoU.ceiling-other': 0.144399995803833, 'IoU.ceiling-tile': 0.00039999999105930326, 'IoU.cloth': 0.0010000000149011613, 'IoU.clothes': 0.023299999237060547, 'IoU.clouds': 0.009100000262260438, 'IoU.counter': 0.00019999999552965163, 'IoU.cupboard': 0.010399999618530274, 'IoU.curtain': 0.12710000038146974, 'IoU.desk-stuff': 0.0840999984741211, 'IoU.dirt': 0.12989999771118163, 'IoU.door-stuff': 0.02319999933242798, 'IoU.fence': 0.13699999809265137, 'IoU.floor-marble': 0.0, 'IoU.floor-other': 0.03009999990463257, 'IoU.floor-stone': 0.0, 'IoU.floor-tile': 0.24969999313354493, 'IoU.floor-wood': 0.032200000286102294, 'IoU.flower': 0.004900000095367432, 'IoU.fog': 0.027899999618530274, 'IoU.food-other': 0.018799999952316283, 'IoU.fruit': 0.14300000190734863, 'IoU.furniture-other': 0.003100000023841858, 'IoU.grass': 0.01190000057220459, 'IoU.gravel': 0.10739999771118164, 'IoU.ground-other': 0.0014000000059604645, 'IoU.hill': 0.001599999964237213, 'IoU.house': 0.00029999999329447744, 'IoU.leaves': 0.0, 'IoU.light': 0.0018000000715255738, 'IoU.mat': 0.0, 'IoU.metal': 0.0, 'IoU.mirror-stuff': 0.0005999999865889549, 'IoU.moss': 0.0, 'IoU.mountain': 0.26059999465942385, 'IoU.mud': 0.007400000095367431, 'IoU.napkin': 0.04989999771118164, 'IoU.net': 0.01740000009536743, 'IoU.paper': 0.0037000000476837156, 'IoU.pavement': 0.2670000076293945, 'IoU.pillow': 0.015299999713897705, 'IoU.plant-other': 0.0014000000059604645, 'IoU.plastic': 0.0, 'IoU.platform': 0.0, 'IoU.playingfield': 0.007300000190734863, 'IoU.railing': 0.0023000000417232516, 'IoU.railroad': 0.2134000015258789, 'IoU.river': 0.0023999999463558195, 'IoU.road': 0.049000000953674315, 'IoU.rock': 0.00029999999329447744, 'IoU.roof': 0.0, 'IoU.rug': 0.014700000286102294, 'IoU.salad': 0.017000000476837158, 'IoU.sand': 0.10079999923706055, 'IoU.sea': 0.47560001373291017, 'IoU.shelf': 0.0, 'IoU.sky-other': 0.04949999809265137, 'IoU.skyscraper': 0.16200000762939454, 'IoU.snow': 0.5136000061035156, 'IoU.solid-other': 0.0, 'IoU.stairs': 0.007300000190734863, 'IoU.stone': 0.0, 'IoU.straw': 0.0, 'IoU.structural-other': 0.0, 'IoU.table': 0.0, 'IoU.tent': 0.018300000429153442, 'IoU.textile-other': 0.020399999618530274, 'IoU.towel': 0.011200000047683716, 'IoU.tree': 0.17719999313354493, 'IoU.vegetable': 0.010499999523162842, 'IoU.wall-brick': 0.053400001525878905, 'IoU.wall-concrete': 0.03440000057220459, 'IoU.wall-other': 0.0, 'IoU.wall-panel': 0.0, 'IoU.wall-stone': 0.0062999999523162846, 'IoU.wall-tile': 0.12, 'IoU.wall-wood': 0.026700000762939453, 'IoU.water-other': 0.0, 'IoU.waterdrops': 0.0, 'IoU.window-blind': 0.0175, 'IoU.window-other': 0.0, 'IoU.wood': 0.013200000524520875, 'Acc.person': 0.16780000686645508, 'Acc.bicycle': 0.4290999984741211, 'Acc.car': 0.3209000015258789, 'Acc.motorcycle': 0.8716999816894532, 'Acc.airplane': 0.8418000030517578, 'Acc.bus': 0.7020999908447265, 'Acc.train': 0.18459999084472656, 'Acc.truck': 0.24760000228881837, 'Acc.boat': 0.22799999237060548, 'Acc.traffic light': 0.49, 'Acc.fire hydrant': 0.02799999952316284, 'Acc.stop sign': 0.7258000183105469, 'Acc.parking meter': 0.6277999877929688, 'Acc.bench': 0.49990001678466794, 'Acc.bird': 0.0, 'Acc.cat': 0.9219000244140625, 'Acc.dog': 0.0025999999046325685, 'Acc.horse': 0.5631999969482422, 'Acc.sheep': 0.48959999084472655, 'Acc.cow': 0.6293999862670898, 'Acc.elephant': 0.8644000244140625, 'Acc.bear': 0.1225, 'Acc.zebra': 0.8833999633789062, 'Acc.giraffe': 0.7045999908447266, 'Acc.backpack': 0.7902999877929687, 'Acc.umbrella': 0.6441999816894531, 'Acc.handbag': 0.0007999999821186065, 'Acc.tie': 0.4465999984741211, 'Acc.suitcase': 0.3933000183105469, 'Acc.frisbee': 0.00039999999105930326, 'Acc.skis': 0.7594000244140625, 'Acc.snowboard': 0.28950000762939454, 'Acc.sports ball': 0.00019999999552965163, 'Acc.kite': 0.5265999984741211, 'Acc.baseball bat': 0.2343000030517578, 'Acc.baseball glove': 0.9016999816894531, 'Acc.skateboard': 0.13989999771118164, 'Acc.surfboard': 0.18450000762939453, 'Acc.tennis racket': 0.8040000152587891, 'Acc.bottle': 0.007300000190734863, 'Acc.wine glass': 0.4147999954223633, 'Acc.cup': 0.007900000214576722, 'Acc.fork': 0.18149999618530274, 'Acc.knife': 0.0, 'Acc.spoon': 0.003400000035762787, 'Acc.bowl': 0.0011999999731779098, 'Acc.banana': 0.730999984741211, 'Acc.apple': 0.5986999893188476, 'Acc.sandwich': 0.15050000190734864, 'Acc.orange': 0.0, 'Acc.broccoli': 0.8180000305175781, 'Acc.carrot': 0.0, 'Acc.hot dog': 0.07769999980926513, 'Acc.pizza': 0.8769000244140625, 'Acc.donut': 0.4408000183105469, 'Acc.cake': 0.5590000152587891, 'Acc.chair': 0.10189999580383301, 'Acc.couch': 0.6901000213623046, 'Acc.potted plant': 0.010700000524520874, 'Acc.bed': 0.11930000305175781, 'Acc.dining table': 0.12050000190734864, 'Acc.toilet': 0.7651000213623047, 'Acc.tv': 0.35939998626708985, 'Acc.laptop': 0.584900016784668, 'Acc.mouse': 0.0, 'Acc.remote': 0.0, 'Acc.keyboard': 0.0028999999165534975, 'Acc.cell phone': 0.004399999976158142, 'Acc.microwave': 0.3111000061035156, 'Acc.oven': 0.01440000057220459, 'Acc.toaster': 0.03380000114440918, 'Acc.sink': 0.6862999725341797, 'Acc.refrigerator': 0.3064999961853027, 'Acc.book': 0.1140999984741211, 'Acc.clock': 0.37220001220703125, 'Acc.vase': 0.012300000190734864, 'Acc.scissors': 0.01190000057220459, 'Acc.teddy bear': 0.7795999908447265, 'Acc.hair drier': 0.23700000762939452, 'Acc.toothbrush': 0.37259998321533205, 'Acc.banner': 0.10649999618530273, 'Acc.blanket': 0.22440000534057616, 'Acc.branch': 0.05159999847412109, 'Acc.bridge': 0.026600000858306886, 'Acc.building-other': 0.2893000030517578, 'Acc.bush': 0.0, 'Acc.cabinet': 0.0, 'Acc.cage': 0.006399999856948852, 'Acc.cardboard': 0.00949999988079071, 'Acc.carpet': 0.6122999954223632, 'Acc.ceiling-other': 0.15939999580383302, 'Acc.ceiling-tile': 0.02799999952316284, 'Acc.cloth': 0.0020999999344348905, 'Acc.clothes': 0.15210000038146973, 'Acc.clouds': 0.009100000262260438, 'Acc.counter': 0.00019999999552965163, 'Acc.cupboard': 0.5968999862670898, 'Acc.curtain': 0.5804999923706055, 'Acc.desk-stuff': 0.37709999084472656, 'Acc.dirt': 0.4361999893188477, 'Acc.door-stuff': 0.029100000858306885, 'Acc.fence': 0.25729999542236326, 'Acc.floor-marble': 0.0, 'Acc.floor-other': 0.040399999618530275, 'Acc.floor-stone': 0.0, 'Acc.floor-tile': 0.47069999694824216, 'Acc.floor-wood': 0.045799999237060546, 'Acc.flower': 0.005, 'Acc.fog': 0.8769999694824219, 'Acc.food-other': 0.034200000762939456, 'Acc.fruit': 0.2545000076293945, 'Acc.furniture-other': 0.003100000023841858, 'Acc.grass': 0.012000000476837159, 'Acc.gravel': 0.15220000267028808, 'Acc.ground-other': 0.001599999964237213, 'Acc.hill': 0.0017000000178813935, 'Acc.house': 0.00029999999329447744, 'Acc.leaves': 0.0, 'Acc.light': 0.0020000000298023225, 'Acc.mat': 0.0, 'Acc.metal': 0.0, 'Acc.mirror-stuff': 0.0005999999865889549, 'Acc.moss': 0.0, 'Acc.mountain': 0.3833000183105469, 'Acc.mud': 0.15329999923706056, 'Acc.napkin': 0.5159999847412109, 'Acc.net': 0.021400001049041748, 'Acc.paper': 0.0037000000476837156, 'Acc.pavement': 0.5813000106811523, 'Acc.pillow': 0.07329999923706054, 'Acc.plant-other': 0.0014000000059604645, 'Acc.plastic': 0.0, 'Acc.platform': 0.0, 'Acc.playingfield': 0.007699999809265137, 'Acc.railing': 0.0025, 'Acc.railroad': 0.615, 'Acc.river': 0.0025, 'Acc.road': 0.05239999771118164, 'Acc.rock': 0.00029999999329447744, 'Acc.roof': 0.0, 'Acc.rug': 0.016699999570846558, 'Acc.salad': 0.557599983215332, 'Acc.sand': 0.7080000305175781, 'Acc.sea': 0.5956999969482422, 'Acc.shelf': 0.0, 'Acc.sky-other': 0.05260000228881836, 'Acc.skyscraper': 0.48209999084472654, 'Acc.snow': 0.5836999893188477, 'Acc.solid-other': 0.0, 'Acc.stairs': 0.010399999618530274, 'Acc.stone': 0.0, 'Acc.straw': 0.0, 'Acc.structural-other': 0.0, 'Acc.table': 0.0, 'Acc.tent': 0.051999998092651364, 'Acc.textile-other': 0.02430000066757202, 'Acc.towel': 0.031700000762939454, 'Acc.tree': 0.19260000228881835, 'Acc.vegetable': 0.012100000381469727, 'Acc.wall-brick': 0.07780000209808349, 'Acc.wall-concrete': 0.04, 'Acc.wall-other': 0.0, 'Acc.wall-panel': 0.0, 'Acc.wall-stone': 0.006600000262260437, 'Acc.wall-tile': 0.12300000190734864, 'Acc.wall-wood': 0.028900001049041748, 'Acc.water-other': 0.0, 'Acc.waterdrops': 0.0, 'Acc.window-blind': 0.8119000244140625, 'Acc.window-other': 0.0, 'Acc.wood': 0.014099999666213989}], 'val/avg_miou': 10.44}
+[2025-10-14 12:03:49 default] (main.py 245): INFO  >> 10.44, 10.44
+[2025-10-14 12:03:49 default] (main.py 246): INFO Experiment dir: inference_log/stuff_k12
+[2025-10-14 12:03:49 default] (main.py 145): INFO Saved results at segmentation_results/vitb_jscc_infonce.json
+[2025-10-14 12:03:49 default] (main.py 607): INFO Experiment dir: inference_log/stuff_k12

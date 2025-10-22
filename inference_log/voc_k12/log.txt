@@ -1,0 +1,179 @@
+[2025-10-14 11:35:32 default] (main.py 589): INFO Full config saved to inference_log/voc_k12/config.json
+[2025-10-14 11:35:32 default] (main.py 595): INFO Environment info:
+------------------------------------------------------------
+sys.platform: linux
+Python: 3.10.16 (main, Dec 11 2024, 16:24:50) [GCC 11.2.0]
+CUDA available: True
+GPU 0,1,2,3: NVIDIA GeForce RTX 4090
+CUDA_HOME: /usr/local/cuda-11.8
+NVCC: Cuda compilation tools, release 11.8, V11.8.89
+GCC: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
+PyTorch: 1.13.1+cu117
+PyTorch compiling details: PyTorch built with:
+  - GCC 9.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.0 Product Build 20191122 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.6.0 (Git Hash 52b5f107dd9cf10910aaa19cb47f3abf9b349815)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX2
+  - CUDA Runtime 11.7
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86
+  - CuDNN 8.5
+  - Magma 2.6.1
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.7, CUDNN_VERSION=8.5.0, CXX_COMPILER=/opt/rh/devtoolset-9/root/usr/bin/c++, CXX_FLAGS= -fabi-version=11 -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Werror=non-virtual-dtor -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wunused-local-typedefs -Wno-unused-parameter -Wno-unused-function -Wno-unused-result -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Werror=cast-function-type -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.13.1, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, USE_ROCM=OFF, 
+
+TorchVision: 0.14.1+cu117
+OpenCV: 4.6.0
+MMCV: 1.6.2
+MMCV Compiler: GCC 9.4
+MMCV CUDA Compiler: 11.8
+------------------------------------------------------------
+
+[2025-10-14 11:35:32 default] (main.py 597): INFO Git hash: ef51a59
+[2025-10-14 11:35:32 default] (main.py 600): INFO evaluate:
+  pamr: false
+  bg_thresh: 0.4
+  kp_w: 0.3
+  pred_qual_path: null
+  gt_qual_path: null
+  eval_only: true
+  template: sub_imagenet_template
+  task:
+  - voc20
+  t_voc20: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/t_pascal_voc12_20.py
+  t_context59: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/t_pascal_context59.py
+  voc: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_voc12.py
+  voc20: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_voc12_20.py
+  context: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_context.py
+  context59: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/pascal_context59.py
+  coco_stuff: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/stuff.py
+  coco_object: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/coco.py
+  cityscapes: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/cityscapes.py
+  ade20k: src/open_vocabulary_segmentation/segmentation/configs/_base_/datasets/ade20k.py
+  save_logits: null
+  eval_freq: 5000
+_base_: default.yml
+data:
+  batch_size: 256
+  pin_memory: true
+  num_workers: 0
+  seed: ${train.seed}
+  dataset:
+    meta:
+      gcc3m:
+        type: img_txt_pair
+        path: ./data/gcc3m
+        prefix: gcc-train-{000000..00347}.tar
+        length: 2881393
+      gcc12m:
+        type: img_txt_pair
+        path: ./data/gcc12m
+        prefix: cc-{000000..001175}.tar
+        length: 11286526
+    train:
+    - gcc3m
+    - gcc12m
+  img_aug:
+    deit_aug: true
+    img_size: 224
+    img_scale:
+    - 0.08
+    - 1.0
+    interpolation: bilinear
+    color_jitter: 0.4
+    auto_augment: rand-m9-mstd0.5-inc1
+    re_prob: 0.25
+    re_mode: pixel
+    re_count: 1
+  text_aug: null
+train:
+  start_step: 0
+  total_steps: 50000
+  warmup_steps: 20000
+  ust_steps: 0
+  base_lr: 0.0016
+  weight_decay: 0.05
+  min_lr: 4.0e-05
+  clip_grad: 5.0
+  fp16: true
+  fp16_comm: true
+  seed: 42
+  lr_scheduler:
+    name: cosine
+  optimizer:
+    name: adamw
+    eps: 1.0e-08
+    betas:
+    - 0.9
+    - 0.999
+checkpoint:
+  resume: ''
+  save_topk: 0
+  save_all: false
+model_name: default
+output: inference_log/voc_k12
+tag: default
+print_freq: 20
+seed: 42
+wandb: false
+model:
+  clip_model_name: ViT-B/16
+  keep_cls: false
+  keep_end_seq: false
+  model_name: dinov2_vitb14_reg
+  proj_model: DINOJSCC_Adapter
+  proj_name: vitb_jscc_infonce
+  proj_class: vitb_jscc_infonce
+  resize_dim: 518
+  type: DINOJSCC
+  use_avg_text_token: false
+  k: 12
+  text_adapter_pretrain: weights/vitb_mlp_infonce.pth
+
+[2025-10-14 11:35:32 default] (main.py 202): INFO Creating model:DINOJSCC/default
+[2025-10-14 11:35:36 default] (main.py 221): INFO number of params: 611521 (0.6M)
+[2025-10-14 11:35:36 default] (main.py 225): INFO GROUP_RANK = 0 | LOCAL_RANK = 0 | RANK = 0 | MASTER_ADDR = 127.0.0.1 | MASTER_PORT = 29500 | ROLE_RANK = 0 | LOCAL_WORLD_SIZE = 1 | WORLD_SIZE = 1 | ROLE_WORLD_SIZE = 1 | TORCHELASTIC_RESTART_COUNT = 0 | TORCHELASTIC_MAX_RESTARTS = 0 | TORCHELASTIC_RUN_ID = none
+[2025-10-14 11:35:36 default] (main.py 232): INFO !!! Single-node setting :: skip fp16 compression hook
+[2025-10-14 11:35:36 default] (main.py 450): INFO ### Validation dataset: voc20 (Subset)
+[2025-10-14 11:35:37 default] (dinotext_seg.py 43): INFO Building DINOTextSegInference with 20 classes, test_cfg=Config (path: None): {'mode': 'slide', 'stride': (224, 224), 'crop_size': (448, 448)}, with_bg=False, pamr=False, bg_thresh=0.4
+[2025-10-14 11:38:12 default] (logging.py 102): INFO per class results:
+[2025-10-14 11:38:12 default] (logging.py 102): INFO 
++-------------+-------+-------+
+|    Class    |  IoU  |  Acc  |
++-------------+-------+-------+
+|  aeroplane  |  87.0 | 95.15 |
+|   bicycle   | 51.33 | 66.84 |
+|     bird    |  0.01 |  0.01 |
+|     boat    | 55.17 | 57.64 |
+|    bottle   | 22.54 | 25.61 |
+|     bus     |  57.2 | 90.16 |
+|     car     | 46.35 |  48.0 |
+|     cat     |  52.6 | 96.75 |
+|    chair    |  8.16 |  18.8 |
+|     cow     |  33.7 | 69.36 |
+| diningtable | 47.88 | 65.69 |
+|     dog     |  0.97 |  0.99 |
+|    horse    | 62.03 | 77.06 |
+|  motorbike  |  59.2 | 93.13 |
+|    person   | 55.44 | 56.41 |
+| pottedplant | 36.57 | 53.27 |
+|    sheep    | 35.93 | 52.14 |
+|     sofa    | 37.99 | 95.48 |
+|    train    | 44.51 | 46.28 |
+|  tvmonitor  | 40.67 | 86.07 |
++-------------+-------+-------+
+[2025-10-14 11:38:12 default] (logging.py 102): INFO Summary:
+[2025-10-14 11:38:12 default] (logging.py 102): INFO 
++-------+-------+-------+
+|  aAcc |  mIoU |  mAcc |
++-------+-------+-------+
+| 60.03 | 41.76 | 59.74 |
++-------+-------+-------+
+[2025-10-14 11:38:12 default] (main.py 454): INFO [voc20] mIoU of 1449 test images: 41.76%
+[2025-10-14 11:38:12 default] (main.py 241): INFO {'val/voc20_miou': 41.76, 'metrics': [{'aAcc': 0.6003000000000001, 'mIoU': 0.41759999999999997, 'mAcc': 0.5974, 'IoU.aeroplane': 0.87, 'IoU.bicycle': 0.5133000183105468, 'IoU.bird': 9.999999776482581e-05, 'IoU.boat': 0.5516999816894531, 'IoU.bottle': 0.22540000915527345, 'IoU.bus': 0.5720000076293945, 'IoU.car': 0.46349998474121096, 'IoU.cat': 0.5259999847412109, 'IoU.chair': 0.0815999984741211, 'IoU.cow': 0.3370000076293945, 'IoU.diningtable': 0.47880001068115235, 'IoU.dog': 0.009700000286102295, 'IoU.horse': 0.6202999877929688, 'IoU.motorbike': 0.5920000076293945, 'IoU.person': 0.5543999862670899, 'IoU.pottedplant': 0.3656999969482422, 'IoU.sheep': 0.3593000030517578, 'IoU.sofa': 0.37990001678466795, 'IoU.train': 0.445099983215332, 'IoU.tvmonitor': 0.40669998168945315, 'Acc.aeroplane': 0.951500015258789, 'Acc.bicycle': 0.6683999633789063, 'Acc.bird': 9.999999776482581e-05, 'Acc.boat': 0.5763999938964843, 'Acc.bottle': 0.25610000610351563, 'Acc.bus': 0.9016000366210938, 'Acc.car': 0.48, 'Acc.cat': 0.9675, 'Acc.chair': 0.18799999237060547, 'Acc.cow': 0.6936000061035156, 'Acc.diningtable': 0.6569000244140625, 'Acc.dog': 0.009900000095367432, 'Acc.horse': 0.7705999755859375, 'Acc.motorbike': 0.9312999725341797, 'Acc.person': 0.5640999984741211, 'Acc.pottedplant': 0.5327000045776367, 'Acc.sheep': 0.5213999938964844, 'Acc.sofa': 0.954800033569336, 'Acc.train': 0.46279998779296877, 'Acc.tvmonitor': 0.8606999969482422}], 'val/avg_miou': 41.76}
+[2025-10-14 11:38:12 default] (main.py 245): INFO  >> 41.76, 41.76
+[2025-10-14 11:38:12 default] (main.py 246): INFO Experiment dir: inference_log/voc_k12
+[2025-10-14 11:38:12 default] (main.py 145): INFO Saved results at segmentation_results/vitb_jscc_infonce.json
+[2025-10-14 11:38:12 default] (main.py 607): INFO Experiment dir: inference_log/voc_k12
