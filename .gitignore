@@ -4,3 +4,9 @@ weights*/
 wandb/
 assets/
 data/
+*.log
+z*.png
+*.pdf
+inference_log/
+plot_log/
+__pycache__/
