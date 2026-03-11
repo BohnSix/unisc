@@ -13,3 +13,4 @@ __pycache__/
 plot_snr.py
 segmentation_results/
 wx_push.py
+output/
