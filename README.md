@@ -5,7 +5,7 @@
 conda activate bohnsix_talk2dino
 ```
 
-CUDA 11.8
+CUDA 11.8 + Python 3.10
 ```yaml
 torch                        1.13.1+cu117
 torchvision                  0.14.1
