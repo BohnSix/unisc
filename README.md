@@ -2,7 +2,7 @@
 # Environment
 
 ```bash
-conda activate bohnsix_talk2dino
+conda activate unisc
 ```
 
 CUDA 11.8 + Python 3.10
